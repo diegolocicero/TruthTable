@@ -34,7 +34,7 @@
             ItemsSource="{Binding Lettere}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <UniformGrid Rows="8" Columns="8" ShowGridLines="True"/>
+                        <UniformGrid Rows="8" Columns="8" />
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>

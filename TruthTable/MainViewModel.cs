@@ -27,7 +27,7 @@ namespace TruthTable {
                     if (ch == '+' || ch == '*')
                         Segni.Add(new Carattere(ch));
                     else
-                        Lettere.Add(new Carattere(ch + '\'));
+                        Lettere.Add(new Carattere(ch));
                 }
             }
         }
