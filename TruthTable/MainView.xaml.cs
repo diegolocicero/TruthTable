@@ -17,13 +17,8 @@ namespace TruthTable
 {
     public partial class MainView : Window
     {
-
-        
         public MainView()
         {
-            MainViewModel MV = new MainViewModel();
-            DataContext = MV;
-
             InitializeComponent();
         }
 

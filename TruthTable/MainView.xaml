@@ -6,23 +6,46 @@
         xmlns:local="clr-namespace:TruthTable"
         mc:Ignorable="d"
         Title="MainView" Height="450" Width="800">
-    <Grid>
+    <Window.Resources>
+        <local:MainViewModel x:Key="ViewModel"/>
+    </Window.Resources>
+    <StackPanel DataContext="{StaticResource ViewModel}">
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
         <TextBox 
             Text="{Binding Input}"
             Width="250"
             Height="50"
             Background="BurlyWood"
-            Margin="0,0,0,275"
             FontSize="35"
             />
         <Button
             Width="50"
             Height="50"
             Background="AliceBlue"
-            Margin="350,0,0,275"
             Content="Send"
             FontSize="15"
             Command="{Binding SendInputCommand}"
             />
-    </Grid>
+        </StackPanel>
+        <Grid HorizontalAlignment="Center">
+            <ItemsControl 
+            HorizontalAlignment="Left" 
+            VerticalAlignment="Center"
+            ItemsSource="{Binding Lettere}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Rows="8" Columns="8" ShowGridLines="True"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                            <TextBlock Text="{Binding Carac}"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+            
+            
+        </Grid>
+        
+    </StackPanel>
 </Window>
