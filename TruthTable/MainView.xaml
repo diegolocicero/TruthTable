@@ -27,14 +27,13 @@
             Command="{Binding SendInputCommand}"
             />
         </StackPanel>
-        <Grid HorizontalAlignment="Center">
             <ItemsControl 
-            HorizontalAlignment="Left" 
+            HorizontalAlignment="Center" 
             VerticalAlignment="Center"
-            ItemsSource="{Binding Lettere}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <UniformGrid Rows="8" Columns="8" />
+            ItemsSource="{Binding Path=Lettere}">
+                <ItemsControl.ItemsPanel >
+                    <ItemsPanelTemplate >
+                        <UniformGrid  Rows="{Binding Path=NRighe}" Columns="{Binding Path=NColonne}" Background="LightGray"/>
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
@@ -45,7 +44,6 @@
             </ItemsControl>
             
             
-        </Grid>
         
     </StackPanel>
 </Window>
