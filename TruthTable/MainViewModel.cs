@@ -2,12 +2,10 @@
 using System.ComponentModel;
 using System.Windows.Input;
 using System;
-using System.Linq;
-using GalaSoft.MvvmLight.Command;
+using SaleWPF.FrameWork;
+
 namespace TruthTable
 {
-
-
     public class MainViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
@@ -21,17 +19,7 @@ namespace TruthTable
         public ObservableCollection<Carattere> Lettere { get; set; }
         public ObservableCollection<Carattere> Segni { get; set; }
 
-        public ObservableCollection<Carattere> LettereSegni
-        {
-            get
-            {
-                var result = new ObservableCollection<Carattere>(Lettere.Concat(Segni));
-                result.Insert(0, new Carattere(' '));
-                return result;
-            }
-        }
-
-        public int NColonne => LettereSegni.Count;
+        public int NColonne => Lettere.Count+1;
         public int NRighe => (int)Math.Pow(2, Lettere.Count) + 1;
 
         public MainViewModel()
@@ -53,10 +41,10 @@ namespace TruthTable
                         Segni.Add(new Carattere(ch));
                     else
                         Lettere.Add(new Carattere(ch));
+                    
                 }
             }
 
-            OnPropertyChanged(nameof(LettereSegni));
             OnPropertyChanged(nameof(NColonne));
             OnPropertyChanged(nameof(NRighe));
         }
@@ -75,6 +63,4 @@ namespace TruthTable
             Carac = carattere;
         }
     }
-
-
 }
