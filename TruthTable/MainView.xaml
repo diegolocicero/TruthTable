@@ -18,7 +18,7 @@
             Background="BurlyWood"
             FontSize="35"
             />
-        <Button
+            <Button
             Width="50"
             Height="50"
             Background="AliceBlue"
@@ -30,7 +30,7 @@
             <ItemsControl 
             HorizontalAlignment="Center" 
             VerticalAlignment="Center"
-            ItemsSource="{Binding Path=Lettere}">
+            ItemsSource="{Binding Path=Tabella}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <UniformGrid  Rows="{Binding Path=NRighe}" Columns="{Binding Path=NColonne}" Background="LightGray"/>
