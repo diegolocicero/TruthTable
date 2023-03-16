@@ -3,6 +3,8 @@ using System.ComponentModel;
 using System.Windows.Input;
 using System;
 using SaleWPF.FrameWork;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace TruthTable
 {
@@ -18,15 +20,18 @@ namespace TruthTable
         //PROPS NON BINDATE
         public ObservableCollection<Carattere> Lettere { get; set; }
         public ObservableCollection<Carattere> Segni { get; set; }
+        public ObservableCollection<Carattere> Tabella { get; set; }
+
 
         public int NColonne => Lettere.Count+1;
-        public int NRighe => (int)Math.Pow(2, Lettere.Count) + 1;
+        public int NRighe => (int)Math.Pow(2, Lettere.Count);
 
         public MainViewModel()
         {
             SendInputCommand = new RelayCommand(SendInput);
             Lettere = new ObservableCollection<Carattere>();
             Segni = new ObservableCollection<Carattere>();
+            Tabella = new ObservableCollection<Carattere>();
         }
 
         public void SendInput() //Assegna a lettere e segni le lettere e i segni, e grazie al cazzo (scarta i numeri)
@@ -40,18 +45,30 @@ namespace TruthTable
                     if (ch == '+' || ch == '*')
                         Segni.Add(new Carattere(ch));          
                     else
-                    {
                         Lettere.Add(new Carattere(ch));
-                        Lettere.Add(new Carattere(' '));
-                    }
-
                 }
             }
 
             OnPropertyChanged(nameof(NColonne));
             OnPropertyChanged(nameof(NRighe));
+            ComponiTabella();
         }
 
+        public void ComponiTabella()
+        {
+            for (int i = 0; i < Math.Pow(2,Lettere.Count); i++)
+            {
+                string binary = Convert.ToString(i, 2);
+                for (int k = binary.Length; k < Lettere.Count; k++)
+                    binary = binary.Insert(0, "0");
+                for (int j = 0; j < binary.Length; j++)
+                    Tabella.Add(new Carattere(binary[j]));
+                Tabella.Add(new Carattere('R'));
+            }
+
+
+
+        }
         protected void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
