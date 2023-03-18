@@ -1,13 +1,10 @@
-﻿using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Windows.Input;
+﻿using SaleWPF.FrameWork;
 using System;
-using SaleWPF.FrameWork;
 using System.Collections.Generic;
-using System.Linq;
-using System.Windows;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Data;
-using System.Linq.Expressions;
+using System.Windows.Input;
 
 namespace TruthTable
 {
@@ -19,14 +16,14 @@ namespace TruthTable
         public ICommand SendInputCommand { get; set; } //ICommand per settare l'input, si attiva con il button
         public string Input { get; set; } //Prop in binding con la textbox 
         #endregion
-
+        public string InputCopy { get; set; }
         //PROPS NON BINDATE
         public ObservableCollection<Carattere> Lettere { get; set; }
         public ObservableCollection<Carattere> Segni { get; set; }
         public ObservableCollection<Carattere> Tabella { get; set; }
 
 
-        public int NColonne => Lettere.Count+1;
+        public int NColonne => Lettere.Count + 1;
         public int NRighe => (int)Math.Pow(2, Lettere.Count);
 
         public MainViewModel()
@@ -46,22 +43,43 @@ namespace TruthTable
                 if (!char.IsDigit(ch) && ch != ' ')
                 {
                     if (ch == '+' || ch == '*')
-                        Segni.Add(new Carattere(ch));          
-                    else
+                        Segni.Add(new Carattere(ch));
+                    else if (!Lettere.Contains(new Carattere(ch)))
                         Lettere.Add(new Carattere(ch));
                 }
             }
             /*Controlli sull'input aggiuntivi, gestire che non ci possono essere più segni vicini, gestire i segni vietati...*/
-            Input = Input.Replace("+", " AND ");
+            TrasformaInput();
             OnPropertyChanged(nameof(Input));
             OnPropertyChanged(nameof(NColonne));
             OnPropertyChanged(nameof(NRighe));
             ComponiTabella();
         }
-
+        public void TrasformaInput()
+        {
+            InputCopy = Input;
+            InputCopy = InputCopy.Insert(0, "(");
+            InputCopy = InputCopy.Insert(InputCopy.Length, ")");
+            for (int i = 0; i < InputCopy.Length; i++)
+            {
+                if (i != InputCopy.Length-1 && char.IsLetter(InputCopy[i+1]) && char.IsLetter(InputCopy[i]) && InputCopy[i] != ')' && InputCopy[i] != '(')
+                {
+                    InputCopy = InputCopy.Insert(i + 1, "*");
+                }
+                if (InputCopy[i] == '+')
+                {
+                    InputCopy = InputCopy.Insert(i, ")");
+                    InputCopy = InputCopy.Insert(i+2, "("); //Il problema è qui
+                    i++;
+                }
+            }           
+            InputCopy = InputCopy.Replace("+", "OR ");
+            InputCopy = InputCopy.Replace("*", "AND ");
+            
+        }
         public void ComponiTabella()
         {
-            for (int i = 0; i < Math.Pow(2,Lettere.Count); i++)
+            for (int i = 0; i < Math.Pow(2, Lettere.Count); i++)
             {
                 string binary = Convert.ToString(i, 2);
                 for (int k = binary.Length; k < Lettere.Count; k++)
@@ -73,14 +91,22 @@ namespace TruthTable
         }
         public Carattere CalcolaRisultato(string binary)
         {
-            binary = binary.Replace("1", "True");
-            binary = binary.Replace("0", "True");
-            string espressione = binary; // Esempio di espressione booleana in forma testuale
-            bool risultato = (bool)new DataTable().Compute(espressione, null); // Valuta l'espressione e converte il risultato in un valore booleano
-            MessageBox.Show(risultato.ToString());
-            return new Carattere('T'); //PER OGNI ITERAZIONE DELLA RIGA DELLA TABLE SE A è 0 SOSTITUARLA CON FALSE E SE è 1 CON TRUE
-                Tabella.Add(new Carattere('R'));
+            Dictionary<char, char> dict = new Dictionary<char, char>();
+            string copia = InputCopy;
+            for (int i = 0; i < Lettere.Count; i++)
+            {
+                if (!dict.ContainsKey(Lettere[i].Carac))
+                    dict.Add(Lettere[i].Carac, binary[i]);
             }
+            foreach (char c in dict.Keys)
+            {
+                copia = copia.Replace(c.ToString(), dict[c] + " ");
+            }
+            copia = copia.Replace("0", "False");
+            copia = copia.Replace("1", "True");
+            bool risultato = (bool)new DataTable().Compute(copia, null); 
+            return new Carattere(risultato? '1' : '0'); 
+        }
         protected void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
@@ -94,5 +120,12 @@ namespace TruthTable
         {
             Carac = carattere;
         }
+        public override bool Equals(object? obj)
+        {
+            return (obj as Carattere).Carac.Equals(Carac);
+        }
     }
 }
+
+
+//Nella stringa input, scandisci la stringa, se dopo una lettere vedi + allora lascia vuoto, se vedi un'altra lettera mettici un OR subito dopo
