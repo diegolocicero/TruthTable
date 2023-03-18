@@ -19,7 +19,6 @@ namespace TruthTable
         public string InputCopy { get; set; }
         //PROPS NON BINDATE
         public ObservableCollection<Carattere> Lettere { get; set; }
-        public ObservableCollection<Carattere> Segni { get; set; }
         public ObservableCollection<Carattere> Tabella { get; set; }
 
 
@@ -30,22 +29,20 @@ namespace TruthTable
         {
             SendInputCommand = new RelayCommand(SendInput);
             Lettere = new ObservableCollection<Carattere>();
-            Segni = new ObservableCollection<Carattere>();
             Tabella = new ObservableCollection<Carattere>();
         }
 
         public void SendInput() //Assegna a lettere e segni le lettere e i segni, e grazie al cazzo (scarta i numeri)
         {
             Lettere.Clear();
-            Segni.Clear();
             foreach (char ch in Input)
             {
                 if (!char.IsDigit(ch) && ch != ' ')
                 {
-                    if (ch == '+' || ch == '*')
-                        Segni.Add(new Carattere(ch));
+                    if (ch == '+' || ch == '*' || ch == '!')
+                        continue;
                     else if (!Lettere.Contains(new Carattere(ch)))
-                        Lettere.Add(new Carattere(ch));
+                        Lettere.Add(new Carattere(Convert.ToChar(ch.ToString().ToLower())));
                 }
             }
             /*Controlli sull'input aggiuntivi, gestire che non ci possono essere più segni vicini, gestire i segni vietati...*/
@@ -73,8 +70,10 @@ namespace TruthTable
                     i++;
                 }
             }           
-            InputCopy = InputCopy.Replace("+", "OR ");
-            InputCopy = InputCopy.Replace("*", "AND ");
+            InputCopy = InputCopy.ToLower().Trim();
+            InputCopy = InputCopy.Replace("!", " NOT ");
+            InputCopy = InputCopy.Replace("+", " OR ");
+            InputCopy = InputCopy.Replace("*", " AND ");
             
         }
         public void ComponiTabella()
@@ -104,7 +103,7 @@ namespace TruthTable
             }
             copia = copia.Replace("0", "False");
             copia = copia.Replace("1", "True");
-            bool risultato = (bool)new DataTable().Compute(copia, null); 
+            bool risultato = (bool)new DataTable().Compute(copia, null); //"DFWFEWFEWFWEF"
             return new Carattere(risultato? '1' : '0'); 
         }
         protected void OnPropertyChanged(string propertyName)

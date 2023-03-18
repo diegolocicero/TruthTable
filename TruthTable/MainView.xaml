@@ -10,11 +10,13 @@
         <local:MainViewModel x:Key="ViewModel"/>
     </Window.Resources>
     <StackPanel DataContext="{StaticResource ViewModel}">
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-        <TextBox 
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,45,0,0">
+            <TextBox 
             Text="{Binding Input}"
             Width="250"
             Height="50"
+            BorderThickness="0"
+            Margin="0,0,15,0"
             Background="BurlyWood"
             FontSize="35"
             />
@@ -22,6 +24,7 @@
             Width="50"
             Height="50"
             Background="AliceBlue"
+            BorderThickness="0"
             Content="Send"
             FontSize="15"
             Command="{Binding SendInputCommand}"
@@ -38,7 +41,9 @@
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
+                    <Border BorderThickness="0.5" BorderBrush="Black">
                             <TextBlock Text="{Binding Carac}"/>
+                    </Border>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
