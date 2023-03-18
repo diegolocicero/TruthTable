@@ -35,6 +35,8 @@ namespace TruthTable
         public void SendInput() //Assegna a lettere e segni le lettere e i segni, e grazie al cazzo (scarta i numeri)
         {
             Lettere.Clear();
+            InputCopy = string.Empty;
+            Tabella.Clear();
             foreach (char ch in Input)
             {
                 if (!char.IsDigit(ch) && ch != ' ')
@@ -121,6 +123,7 @@ namespace TruthTable
         }
         public override bool Equals(object? obj)
         {
+                if (obj is not Carattere) return false;
             return (obj as Carattere).Carac.Equals(Carac);
         }
     }
