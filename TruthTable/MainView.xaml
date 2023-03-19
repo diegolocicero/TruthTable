@@ -42,7 +42,7 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                     <Border BorderThickness="0.5" BorderBrush="Black">
-                            <TextBlock Text="{Binding Carac}"/>
+                            <TextBlock FontWeight="Bold" FontSize="30" Text="{Binding}"/>
                     </Border>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
