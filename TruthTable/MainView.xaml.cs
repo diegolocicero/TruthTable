@@ -21,5 +21,18 @@ namespace TruthTable
             InitializeComponent();
         }
 
+        private void onMouseHover(object sender, MouseEventArgs e)
+        {
+            ScaleTransform scale = new ScaleTransform(1.25, 1.25, sendButton.ActualWidth / 2, sendButton.ActualHeight / 2);
+            sendButton.RenderTransform = scale;
+            sendButton.Foreground = Brushes.Black;
+            Cursor = Cursors.Hand;
+        }
+        private void onMouseLeave(object sender, MouseEventArgs e)
+        {
+            sendButton.RenderTransform = null;
+            sendButton.Foreground = Brushes.White;
+            Cursor = Cursors.Arrow;
+        }
     }
 }

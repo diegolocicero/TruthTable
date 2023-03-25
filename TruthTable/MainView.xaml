@@ -5,29 +5,43 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TruthTable"
         mc:Ignorable="d"
-        Title="MainView"  Height="1000" Width="800" ResizeMode="NoResize">
+        Title="MainView"  Height="800" Width="550" ResizeMode="NoResize">
     <Window.Resources>
         <local:MainViewModel x:Key="ViewModel"/>
     </Window.Resources>
+    <Window.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+            <GradientStop Color="#0014FF" Offset="0"/>
+            <GradientStop Color="#009EFF" Offset="0.4"/>
+            <GradientStop Color="#00E7FF" Offset="0.8"/>
+        </LinearGradientBrush>
+    </Window.Background>
+
     <StackPanel DataContext="{StaticResource ViewModel}">
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,45,0,0">
+        <TextBlock Text="TruthTable" Margin="-450,10,0,0" Width="60" Foreground="#A0E4CB"></TextBlock>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,25,0,0">
             <TextBox 
+            Name="inputField"
             Text="{Binding Input}"
             Width="250"
             Height="50"
             BorderThickness="0"
             Margin="0,0,15,0"
-            Background="BurlyWood"
+            Background="#86E5FF"
             FontSize="35"
             />
             <Button
+            Name="sendButton"
             Width="50"
             Height="50"
-            Background="AliceBlue"
+            Background="#4bafc9"
+            Foreground="White"
             BorderThickness="0"
             Content="Send"
             FontSize="15"
             Command="{Binding SendInputCommand}"
+            MouseEnter="onMouseHover" 
+            MouseLeave="onMouseLeave"
             />
         </StackPanel>
             <ItemsControl 
@@ -36,13 +50,13 @@
             ItemsSource="{Binding Path=Tabella}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <UniformGrid  Rows="{Binding Path=NRighe}" Columns="{Binding Path=NColonne}" Background="LightGray"/>
-                    </ItemsPanelTemplate>
+                    <UniformGrid  Rows="{Binding Path=NRighe}" Columns="{Binding Path=NColonne}" Margin="0,20,0,0"/>
+                </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                    <Border BorderThickness="0.5" BorderBrush="Black">
-                            <TextBlock FontWeight="Bold" FontSize="30" Text="{Binding}"/>
+                    <Border BorderThickness="1.5" BorderBrush="Black" Margin="7.5,5,0,0">
+                        <TextBlock FontWeight="Bold" FontSize="30" Text="{Binding}" Padding="7.5" TextAlignment="Center" Width="40" Background="#50000000"/>
                     </Border>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>

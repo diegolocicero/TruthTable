@@ -43,6 +43,11 @@ namespace TruthTable
         }
         public void SendInput()
         {
+            if (string.IsNullOrEmpty(Input))
+            {
+                Tabella.Clear();
+                return;
+            }
             Pulisci();
             InputCopy = Input.ToLower().Replace("and", "+").Replace(" ", "").Replace("xor", "^").Replace("or", "").Replace("not", "!").Replace("*", "");
             foreach (char ch in InputCopy)
@@ -125,7 +130,6 @@ namespace TruthTable
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
-
 }
 
 
