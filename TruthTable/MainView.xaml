@@ -55,8 +55,8 @@
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                    <Border BorderThickness="1.5" BorderBrush="Black" Margin="7.5,5,0,0">
-                        <TextBlock FontWeight="Bold" FontSize="30" Text="{Binding}" Padding="7.5" TextAlignment="Center" Width="40" Background="#50000000"/>
+                    <Border BorderThickness="1.5" BorderBrush="Black" Margin="7.5,5,0,0" Background="{Binding Colore}">
+                        <TextBlock FontWeight="Bold" FontSize="30" Text="{Binding Numero}" Padding="7.5" TextAlignment="Center" Width="40" Background="#50000000"/>
                     </Border>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>

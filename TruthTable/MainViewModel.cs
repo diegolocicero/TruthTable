@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
+using System.Linq;
 using System.Windows.Input;
 
 namespace TruthTable
@@ -22,11 +23,12 @@ namespace TruthTable
         #endregion
         #region Gestione Output
 
-        public ObservableCollection<Char> Tabella { get; set; }
-
-
+        public ObservableCollection<Casella> Tabella { get; set; }
         public int NColonne => Lettere.Count + 1;
-        public int NRighe => (int)Math.Pow(2, Lettere.Count);
+        public int NRighe => (int)Math.Pow(2, Lettere.Count) + 1;
+        public string coloreRisultato = "Red";
+        public string coloreElemento = "Green";
+        public string coloreLettere = "Purple";
         #endregion
 
 
@@ -34,7 +36,7 @@ namespace TruthTable
         {
             SendInputCommand = new RelayCommand(SendInput);
             Lettere = new ObservableCollection<Char>();
-            Tabella = new ObservableCollection<Char>();
+            Tabella = new ObservableCollection<Casella>();
         }
         private void Pulisci()
         {
@@ -49,7 +51,7 @@ namespace TruthTable
                 return;
             }
             Pulisci();
-            InputCopy = Input.ToLower().Replace("and", "+").Replace(" ", "").Replace("xor", "^").Replace("or", "").Replace("not", "!").Replace("*", "");
+            InputCopy = Input.ToLower().Replace("xor", "^").Replace("or", "+").Replace(" ", "").Replace("and", "").Replace("not", "!").Replace("*", "");
             foreach (char ch in InputCopy)
             {
                 if (!char.IsDigit(ch))
@@ -68,27 +70,22 @@ namespace TruthTable
         }
         public void TrasformaInput()
         {
-            InputCopy = InputCopy.Insert(0, "(");
-            InputCopy = InputCopy.Insert(InputCopy.Length, ")");
+            string output = string.Empty;
             for (int i = 0; i < InputCopy.Length; i++)
             {
-                if (i != InputCopy.Length - 1 && char.IsLetter(InputCopy[i + 1]) && char.IsLetter(InputCopy[i]) && InputCopy[i] != ')' && InputCopy[i] != '(')
+                if (i + 1 >= InputCopy.Length)
+                    output += InputCopy[i];
+                else if (i < InputCopy.Length - 1 && char.IsLetter(InputCopy[i]) && (char.IsLetter(InputCopy[i + 1]) || InputCopy[i + 1] == '(' || InputCopy[i + 1] == '!'))
                 {
-                    InputCopy = InputCopy.Insert(i + 1, "*");
+                    output += InputCopy[i] + "*";
                 }
-                if (InputCopy[i] == '+')
+                else
                 {
-                    InputCopy = InputCopy.Insert(i, ")");
-                    InputCopy = InputCopy.Insert(i + 2, "(");
-                    i++;
-                }
-                if (InputCopy[i] == '!' && char.IsLetter(InputCopy[i - 1]))
-                {
-                    InputCopy = InputCopy.Insert(i, "*");
-                    i++;
+                    output += InputCopy[i];
                 }
             }
 
+            InputCopy = output;
             InputCopy = InputCopy.Replace("!", " NOT ");
             InputCopy = InputCopy.Replace("^", " <> ");
             InputCopy = InputCopy.Replace("+", " OR ");
@@ -97,14 +94,19 @@ namespace TruthTable
         }
         public void ComponiTabella()
         {
+            for (int i = 0; i < Lettere.Count; i++)
+            {
+                Tabella.Add(new Casella(Convert.ToChar(Lettere[i].ToString().ToUpper()), coloreLettere));
+            }
+            Tabella.Add(new Casella('R', coloreRisultato));
             for (int i = 0; i < Math.Pow(2, Lettere.Count); i++)
             {
                 string binary = Convert.ToString(i, 2);
                 for (int k = binary.Length; k < Lettere.Count; k++)
                     binary = binary.Insert(0, "0");
                 for (int j = 0; j < binary.Length; j++)
-                    Tabella.Add(binary[j]);
-                Tabella.Add(CalcolaRisultato(binary));
+                    Tabella.Add(new Casella(binary[j], coloreElemento));
+                Tabella.Add(new Casella(CalcolaRisultato(binary), coloreRisultato));
             }
         }
         public char CalcolaRisultato(string binary)
@@ -113,8 +115,7 @@ namespace TruthTable
             string copia = InputCopy;
             for (int i = 0; i < Lettere.Count; i++)
             {
-                if (!dict.ContainsKey(Lettere[i])) //Forse si può togliere
-                    dict.Add(Lettere[i], binary[i]);
+                dict.Add(Lettere[i], binary[i]);
             }
             foreach (char c in dict.Keys)
             {
@@ -128,6 +129,16 @@ namespace TruthTable
         protected void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+    }
+    public class Casella
+    {
+        public char Numero { get; set; }
+        public string Colore { get; set; }
+        public Casella(char Numero, string Colore)
+        {
+            this.Numero = Numero;
+            this.Colore = Colore;
         }
     }
 }
