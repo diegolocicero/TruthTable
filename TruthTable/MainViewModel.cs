@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
-using System.Linq;
 using System.Windows.Input;
 
 namespace TruthTable
@@ -26,9 +25,10 @@ namespace TruthTable
         public ObservableCollection<Casella> Tabella { get; set; }
         public int NColonne => Lettere.Count + 1;
         public int NRighe => (int)Math.Pow(2, Lettere.Count) + 1;
-        public string coloreRisultato = "Red";
-        public string coloreElemento = "Green";
-        public string coloreLettere = "Purple";
+        public string coloreRisultato = "#4D000000";
+        public string coloreElemento = "#4DEA7070";
+        public string coloreLettere = "#E6EA7070";
+        public string coloreR = "#EA7070";
         #endregion
 
 
@@ -76,13 +76,9 @@ namespace TruthTable
                 if (i + 1 >= InputCopy.Length)
                     output += InputCopy[i];
                 else if (i < InputCopy.Length - 1 && char.IsLetter(InputCopy[i]) && (char.IsLetter(InputCopy[i + 1]) || InputCopy[i + 1] == '(' || InputCopy[i + 1] == '!'))
-                {
                     output += InputCopy[i] + "*";
-                }
                 else
-                {
                     output += InputCopy[i];
-                }
             }
 
             InputCopy = output;
@@ -98,7 +94,7 @@ namespace TruthTable
             {
                 Tabella.Add(new Casella(Convert.ToChar(Lettere[i].ToString().ToUpper()), coloreLettere));
             }
-            Tabella.Add(new Casella('R', coloreRisultato));
+            Tabella.Add(new Casella('R', coloreR));
             for (int i = 0; i < Math.Pow(2, Lettere.Count); i++)
             {
                 string binary = Convert.ToString(i, 2);
@@ -142,6 +138,3 @@ namespace TruthTable
         }
     }
 }
-
-
-//Nella stringa input, scandisci la stringa, se dopo una lettere vedi + allora lascia vuoto, se vedi un'altra lettera mettici un OR subito dopo

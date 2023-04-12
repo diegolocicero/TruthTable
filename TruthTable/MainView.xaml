@@ -11,58 +11,62 @@
     </Window.Resources>
     <Window.Background>
         <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-            <GradientStop Color="#0014FF" Offset="0"/>
-            <GradientStop Color="#009EFF" Offset="0.4"/>
-            <GradientStop Color="#00E7FF" Offset="0.8"/>
+            <GradientStop Color="#2694AB" Offset="0"/>
+            <GradientStop Color="#EA7070" Offset="0.3"/>
+            <GradientStop Color="#FDC4B6" Offset="0.8"/>
         </LinearGradientBrush>
     </Window.Background>
 
-    <StackPanel DataContext="{StaticResource ViewModel}">
-        <TextBlock Text="TruthTable" Margin="-450,10,0,0" Width="60" Foreground="#A0E4CB"></TextBlock>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,25,0,0">
-            <TextBox 
-            Name="inputField"
-            Text="{Binding Input}"
-            Width="250"
-            Height="50"
-            BorderThickness="0"
-            Margin="0,0,15,0"
-            Background="#86E5FF"
-            FontSize="35"
-            />
-            <Button
-            Name="sendButton"
-            Width="50"
-            Height="50"
-            Background="#4bafc9"
-            Foreground="White"
-            BorderThickness="0"
-            Content="Send"
-            FontSize="15"
-            Command="{Binding SendInputCommand}"
-            MouseEnter="onMouseHover" 
-            MouseLeave="onMouseLeave"
-            />
-        </StackPanel>
+    <ScrollViewer VerticalScrollBarVisibility="Hidden">
+
+        <StackPanel DataContext="{StaticResource ViewModel}">
+            <TextBlock Text="TruthTable" Margin="-450,10,0,0" Width="60" Foreground="#A0E4CB"></TextBlock>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,25,0,0">
+                <TextBox 
+                Name="inputField"
+                Text="{Binding Input}"
+                Width="250"
+                Height="50"
+                BorderThickness="0"
+                Margin="0,0,15,0"
+                Background="#9986E5FF"
+                FontSize="35"
+                />
+                <Button
+                Name="sendButton"
+                Width="50"
+                Height="50"
+                Background="#994bafc9"
+                Foreground="White"
+                BorderThickness="0"
+                Content="Send"
+                FontSize="15"
+                Command="{Binding SendInputCommand}"
+                MouseEnter="onMouseHover" 
+                MouseLeave="onMouseLeave"
+                />
+
+            </StackPanel>
             <ItemsControl 
-            HorizontalAlignment="Center" 
-            VerticalAlignment="Center"
-            ItemsSource="{Binding Path=Tabella}">
+                HorizontalAlignment="Center" 
+                VerticalAlignment="Center"
+                ItemsSource="{Binding Path=Tabella}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                    <UniformGrid  Rows="{Binding Path=NRighe}" Columns="{Binding Path=NColonne}" Margin="0,20,0,0"/>
-                </ItemsPanelTemplate>
+                        <UniformGrid  Rows="{Binding Path=NRighe}" Columns="{Binding Path=NColonne}" Margin="0,20,0,0"/>
+                    </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                    <Border BorderThickness="1.5" BorderBrush="Black" Margin="7.5,5,0,0" Background="{Binding Colore}">
-                        <TextBlock FontWeight="Bold" FontSize="30" Text="{Binding Numero}" Padding="7.5" TextAlignment="Center" Width="40" Background="#50000000"/>
-                    </Border>
+                        <Border BorderThickness="1.5" BorderBrush="Black" Margin="7.5,5,0,0" Background="{Binding Colore}">
+                            <TextBlock FontWeight="Bold" FontSize="30" Text="{Binding Numero}" Padding="7.5" TextAlignment="Center" Width="40" Background="#50000000"/>
+                        </Border>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
-            
-            
-        
+
+
     </StackPanel>
+    </ScrollViewer>
+
 </Window>
