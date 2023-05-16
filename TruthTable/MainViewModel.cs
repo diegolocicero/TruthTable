@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
+using System.Windows;
 using System.Windows.Input;
 
 namespace TruthTable
@@ -68,16 +69,26 @@ namespace TruthTable
             OnPropertyChanged(nameof(NRighe));
             ComponiTabella();
         }
-        public void TrasformaInput()
+        public void TrasformaInput()        //Non va un cazzo porca di quella troia impanata
         {
             string output = string.Empty;
             for (int i = 0; i < InputCopy.Length; i++)
             {
                 if (i + 1 >= InputCopy.Length)
+                {
                     output += InputCopy[i];
-                else if (i < InputCopy.Length - 1 && char.IsLetter(InputCopy[i]) && (char.IsLetter(InputCopy[i + 1]) || InputCopy[i + 1] == '(' || InputCopy[i + 1] == '!'))
-                    output += InputCopy[i] + "*";
-                else
+                    continue;
+                }
+                else if (i < InputCopy.Length - 1)
+                {
+                    if (char.IsLetter(InputCopy[i]) || InputCopy[i] == ')')
+                        if (char.IsLetter(InputCopy[i + 1]) || InputCopy[i + 1] == '(' || InputCopy[i + 1] == '!')
+                        {
+                            output += InputCopy[i] + "*";
+                            continue;
+                        }
+                }
+                
                     output += InputCopy[i];
             }
 
